@@ -9,9 +9,21 @@ fetch('assets/countries.geojson')
     .then(res => res.json())
     .then(data => {
         L.geoJSON(data, {
+            style: {
+                fillColor: '#3388ff',
+                fillOpacity: 0.3,
+                color: '#333',
+                weight: 1
+            },
             onEachFeature: (feature, layer) => {
                 layer.on('click', () => {
                     console.log(feature.properties.name, feature.properties.iso_a2);
+                });
+                layer.on('mouseover', () => {
+                    layer.setStyle({ fillOpacity: 0.6 });
+                });
+                layer.on('mouseout', () => {
+                    layer.setStyle({ fillOpacity: 0.3 });
                 });
             }
         }).addTo(map);
