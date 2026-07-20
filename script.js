@@ -1,5 +1,27 @@
 const map = L.map('map').setView([0, 0], 3);
 
+let currentAudio = null;
+
+function playStationForCountry(countryCode) {
+    fetch(`https://de1.api.radio-browser.info/json/stations/bycountrycodeexact/${countryCode}`)
+        .then(res => res.json())
+        .then(stations => {
+            if (stations.length === 0) {
+                console.log('No stations found for', countryCode);
+                return;
+            }
+
+            if (currentAudio) {
+                currentAudio.pause();
+            }
+
+            const station = stations[0];
+            currentAudio = new Audio(station.url_resolved);
+            currentAudio.play();
+            console.log('Playing', station.name, 'from', countryCode);
+        });
+}
+
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
