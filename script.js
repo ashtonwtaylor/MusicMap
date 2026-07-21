@@ -39,7 +39,7 @@ fetch('assets/countries.geojson')
             },
             onEachFeature: (feature, layer) => {
                 layer.on('click', () => {
-                    console.log(feature.properties.name, feature.properties.iso_a2);
+                    playStationForCountry(feature.properties.iso_a2);
                 });
                 layer.on('mouseover', () => {
                     layer.setStyle({ fillOpacity: 0.6 });
