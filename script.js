@@ -2,23 +2,42 @@ const map = L.map('map').setView([0, 0], 3);
 
 let currentAudio = null;
 
-function playStationForCountry(countryCode) {
-    fetch(`https://de1.api.radio-browser.info/json/stations/bycountrycodeexact/${countryCode}`)
+function playStation(station) {
+    if (currentAudio) {
+        currentAudio.pause();
+    }
+    currentAudio = new Audio(station.url_resolved);
+    currentAudio.play();
+    console.log('Playing', station.name);
+}
+
+function showStationsForCountry(countryName, countryCode) {
+    const url = `https://de1.api.radio-browser.info/json/stations/search?countrycode=${countryCode}&order=clickcount&reverse=true&limit=15`;
+
+    fetch(url)
         .then(res => res.json())
         .then(stations => {
+            const panel = document.getElementById('station-panel');
+            const list = document.getElementById('station-list');
+            const heading = document.getElementById('country-name');
+
+            heading.textContent = countryName;
+            list.innerHTML = '';
+
             if (stations.length === 0) {
-                console.log('No stations found for', countryCode);
+                list.innerHTML = '<li>No stations found</li>';
+                panel.style.display = 'block';
                 return;
             }
+            
+            stations.forEach(station => {
+                const item = document.createElement('li');
+                item.textContent = station.name;
+                item.addEventListener('click', () => playStation(station));
+                list.appendChild(item);
+            });
 
-            if (currentAudio) {
-                currentAudio.pause();
-            }
-
-            const station = stations[0];
-            currentAudio = new Audio(station.url_resolved);
-            currentAudio.play();
-            console.log('Playing', station.name, 'from', countryCode);
+            panel.style.display = 'block';
         });
 }
 
@@ -39,7 +58,7 @@ fetch('assets/countries.geojson')
             },
             onEachFeature: (feature, layer) => {
                 layer.on('click', () => {
-                    playStationForCountry(feature.properties.iso_a2);
+                    showStationsForCountry(feature.properties.name, feature.properties.iso_a2);
                 });
                 layer.on('mouseover', () => {
                     layer.setStyle({ fillOpacity: 0.6 });
