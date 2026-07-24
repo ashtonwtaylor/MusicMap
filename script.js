@@ -1,6 +1,7 @@
 const map = L.map('map').setView([0, 0], 3);
 
 let currentAudio = null;
+let isMuted = false;
 
 function playStation(station) {
     if (currentAudio) {
@@ -19,6 +20,7 @@ function playStation(station) {
     nowPlaying.textContent = `Loading: ${station.name}...`;
 
     currentAudio = new Audio(station.url_resolved);
+    currentAudio.muted = isMuted;
     currentAudio.volume = volumeSlider.value;
 
     currentAudio.addEventListener('playing', () => {
@@ -41,7 +43,7 @@ function playStation(station) {
 }
 
 function showStationsForCountry(countryName, countryCode) {
-    const url = `https://de1.api.radio-browser.info/json/stations/search?countrycode=${countryCode}&order=clickcount&reverse=true&limit=15`;
+    const url = `https://all.api.radio-browser.info/json/stations/search?countrycode=${countryCode}&order=clickcount&reverse=true&limit=15`;
 
     fetch(url)
         .then(res => res.json())
@@ -80,6 +82,14 @@ document.getElementById('play-stop-btn').addEventListener('click', () => {
         currentAudio.pause();
         document.getElementById('play-stop-btn').textContent = 'Play';
     }
+});
+
+document.getElementById('mute-btn').addEventListener('click', () => {
+    if (!currentAudio) return;
+
+    isMuted = !isMuted;
+    currentAudio.muted = isMuted;
+    document.getElementById('mute-btn').textContent = isMuted ? 'Unmute' : 'Mute';
 });
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
