@@ -6,9 +6,35 @@ function playStation(station) {
     if (currentAudio) {
         currentAudio.pause();
     }
+
+    const nowPlaying = document.getElementById('now-playing-name');
+    const errorSpan = document.getElementById('player-error');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const volumeSlider = document.getElementById('volume-slider');
+
+    errorSpan.textContent = '';
+    nowPlaying.textContent = `Loading: ${station.name}...`;
+
     currentAudio = new Audio(station.url_resolved);
-    currentAudio.play();
-    console.log('Playing', station.name);
+    currentAudio.volume = volumeSlider.value;
+
+    currentAudio.addEventListener('playing', () => {
+        nowPlaying.textContent = station.name;
+        playPauseBtn.textContent = 'Pause';
+    });
+
+    currentAudio.addEventListener('error', () => {
+        errorSpan.textContent = `Unable to play "${station.name}" - stream currently unavailable. Try another station, or try this one again later.`;
+        nowPlaying.textContent = 'No station currently playing.';
+    });
+
+    currentAudio.play().catch((err) => {
+        if (err.name === 'NotAllowedError') {
+            errorSpan.textContent = `Playback blocked by your browser — try clicking the station again.`;
+        } else {
+            errorSpan.textContent = `Unable to play "${station.name}" — ${err.message}`;
+        }
+    });
 }
 
 function showStationsForCountry(countryName, countryCode) {

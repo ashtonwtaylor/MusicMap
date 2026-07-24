@@ -37,3 +37,22 @@ html, body {
 #station-list li:hover {
     background: #f0f0f0;
 }
+
+#player-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #222;
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: sans-serif;
+}
+
+#player-error {
+    color: #ff6b6b;
+}
