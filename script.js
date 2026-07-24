@@ -9,8 +9,11 @@ function playStation(station) {
 
     const nowPlaying = document.getElementById('now-playing-name');
     const errorSpan = document.getElementById('player-error');
-    const playPauseBtn = document.getElementById('play-pause-btn');
+    const playStopBtn = document.getElementById('play-stop-btn');
     const volumeSlider = document.getElementById('volume-slider');
+
+    // Reveal controls once user clicks a station:
+    document.getElementById('player-bar').style.display = 'flex';
 
     errorSpan.textContent = '';
     nowPlaying.textContent = `Loading: ${station.name}...`;
@@ -20,7 +23,7 @@ function playStation(station) {
 
     currentAudio.addEventListener('playing', () => {
         nowPlaying.textContent = station.name;
-        playPauseBtn.textContent = 'Pause';
+        playStopBtn.textContent = 'Stop';
     });
 
     currentAudio.addEventListener('error', () => {
@@ -66,6 +69,18 @@ function showStationsForCountry(countryName, countryCode) {
             panel.style.display = 'block';
         });
 }
+
+document.getElementById('play-stop-btn').addEventListener('click', () => {
+    if (!currentAudio) return;
+
+    if (currentAudio.paused) {
+        currentAudio.play();
+        document.getElementById('play-stop-btn').textContent = 'Stop';
+    } else {
+        currentAudio.pause();
+        document.getElementById('play-stop-btn').textContent = 'Play';
+    }
+});
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,

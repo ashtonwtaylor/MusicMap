@@ -47,7 +47,7 @@ html, body {
     background: #222;
     color: white;
     padding: 10px 15px;
-    display: flex;
+    display: none;
     align-items: center;
     gap: 12px;
     font-family: sans-serif;
