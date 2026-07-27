@@ -8,6 +8,10 @@ html, body {
     width: 100%;
 }
 
+.leaflet-container {
+    background: #000;
+}
+
 #station-panel {
     position: absolute;
     top: 10px;

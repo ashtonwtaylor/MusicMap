@@ -1,4 +1,7 @@
-const map = L.map('map').setView([0, 0], 3);
+const map = L.map('map', {
+    maxBounds: [[-90, -180], [90, 180]],
+    maxBoundsViscosity: 1.0
+}).setView([0, 0], 3);
 
 let currentAudio = null;
 let isMuted = false;
@@ -94,6 +97,7 @@ document.getElementById('mute-btn').addEventListener('click', () => {
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
+    noWrap: true,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
