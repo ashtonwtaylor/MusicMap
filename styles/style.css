@@ -43,17 +43,16 @@ html, body {
 }
 
 #player-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
     z-index: 1000;
     background: #222;
     color: white;
     padding: 10px 15px;
+    margin-top: 10px;
+    border-radius: 6px;
     display: none;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     font-family: sans-serif;
 }
 
