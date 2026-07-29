@@ -95,6 +95,12 @@ document.getElementById('mute-btn').addEventListener('click', () => {
     document.getElementById('mute-btn').textContent = isMuted ? 'Unmute' : 'Mute';
 });
 
+document.getElementById('volume-slider').addEventListener('input', (event) => {
+    if (currentAudio) {
+        currentAudio.volume = event.target.value;
+    }
+});
+
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     noWrap: true,
