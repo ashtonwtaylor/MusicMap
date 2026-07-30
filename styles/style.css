@@ -18,6 +18,7 @@ html, body {
     right: 10px;
     z-index: 1000;
     background: white;
+    width: 280px;
     max-height: 80vh;
     overflow-y: auto;
     padding: 10px 15px;
@@ -36,6 +37,9 @@ html, body {
     padding: 6px 4px;
     cursor: pointer;
     border-bottom: 1px solid #eee;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #station-list li:hover {
@@ -58,4 +62,10 @@ html, body {
 
 #player-error {
     color: #ff6b6b;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    cursor: help;
 }

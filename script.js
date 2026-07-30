@@ -39,7 +39,9 @@ function playStation(station) {
     });
 
     currentAudio.addEventListener('error', () => {
-        errorSpan.textContent = `Unable to play "${station.name}" - stream currently unavailable. Try another station, or try this one again later.`;
+        const message = `Unable to play "${station.name}" - stream currently unavailable. Try another station, or try this one again later.`;
+        errorSpan.textContent = message;
+        errorSpan.title = message;
         nowPlaying.textContent = 'No station currently playing.';
         isLoading = false;
     });
@@ -51,9 +53,13 @@ function playStation(station) {
             return;
         }
         if (err.name === 'NotAllowedError') {
-            errorSpan.textContent = `Playback blocked by your browser — try clicking the station again.`;
+            const message = `Playback blocked by your browser — try clicking the station again.`;
+            errorSpan.textContent = message;
+            errorSpan.title = message;
         } else {
-            errorSpan.textContent = `Unable to play "${station.name}" — ${err.message}`;
+            const message = `Unable to play "${station.name}" — ${err.message}`;
+            errorSpan.textContent = message;
+            errorSpan.title = message;
         }
     });
 }
@@ -80,6 +86,7 @@ function showStationsForCountry(countryName, countryCode) {
             stations.forEach(station => {
                 const item = document.createElement('li');
                 item.textContent = station.name;
+                item.title = station.name;
                 item.addEventListener('click', () => playStation(station));
                 list.appendChild(item);
             });
