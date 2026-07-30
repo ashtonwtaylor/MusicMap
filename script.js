@@ -5,8 +5,14 @@ const map = L.map('map', {
 
 let currentAudio = null;
 let isMuted = false;
+let isLoading = false;
 
 function playStation(station) {
+    if (isLoading) return;
+    isLoading = true;
+    // Use timeout in the event stream hangs:
+    setTimeout(() => { isLoading = false; }, 8000);
+
     if (currentAudio) {
         currentAudio.pause();
     }
@@ -29,14 +35,21 @@ function playStation(station) {
     currentAudio.addEventListener('playing', () => {
         nowPlaying.textContent = station.name;
         playStopBtn.textContent = 'Stop';
+        isLoading = false;
     });
 
     currentAudio.addEventListener('error', () => {
         errorSpan.textContent = `Unable to play "${station.name}" - stream currently unavailable. Try another station, or try this one again later.`;
         nowPlaying.textContent = 'No station currently playing.';
+        isLoading = false;
     });
 
     currentAudio.play().catch((err) => {
+        isLoading = false;
+        if (err.name === 'AbortError') {
+            // Ignore when a new station interrupts the current one. Likely happens when user is clicking too fast.
+            return;
+        }
         if (err.name === 'NotAllowedError') {
             errorSpan.textContent = `Playback blocked by your browser — try clicking the station again.`;
         } else {
